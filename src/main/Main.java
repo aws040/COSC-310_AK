@@ -5,6 +5,7 @@ package main;
  * @version 2026.08.31.11
  */
 public class Main {
-	//test 4
-
+	public static void main(String[] args) {
+        System.out.print("Test");
+    }
 }

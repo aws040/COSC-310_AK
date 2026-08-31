@@ -1,7 +1,9 @@
 /bin/
+out/
+*.class
+
 # Ignore IntelliJ-specific files
 .idea/
 *.iml
 *.iws
 *.ipr
-out/
