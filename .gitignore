@@ -3,9 +3,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .kotlin
-*.iml
-*.idea/*.xml
-*.idea/
 
 bin/
 !**/src/main/**/bin/
