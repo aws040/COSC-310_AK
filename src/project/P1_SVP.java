@@ -13,10 +13,10 @@ import java.util.Scanner;
 
 /**
  * @author Alejandro Borroni
- * @version 2026.09.1.13
+ * @version 2026.09.1.16
  */
 public class P1_SVP {
-    LinkedList<LinkedList<String>> polyLists = new LinkedList<>();
+    private LinkedList<LinkedList<String>> polyLists = new LinkedList<>();
 
     public void addPolys(File file) {
         Scanner sc;
@@ -24,7 +24,7 @@ public class P1_SVP {
             sc = new Scanner(file);
             sc.useDelimiter("Polynomial \\d+:\\s*|//\\s*");
             while (sc.hasNext()) {
-                String chunk =sc.next();
+                String chunk = sc.next();
                 if (chunk.isEmpty()) {
                     continue;
                 }
@@ -32,7 +32,27 @@ public class P1_SVP {
                 sc2.useDelimiter("\r\n");
                 LinkedList<String> list = new LinkedList<>();
                 while (sc2.hasNext()) {
-                    list.add(sc2.next());
+                    String line = sc2.next();
+                    int temp = Integer.parseInt(line.substring(line.indexOf(" ")+1));
+                    int tempCoef = Integer.parseInt(line.substring(0, line.indexOf(" ")));
+                    int index = 0;
+                    if (list.getSize() > 0) {
+                        int size = list.getSize();
+                        for (int i = 0; i < size; i++) {
+                            String item = list.get(i);
+                            int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
+                            int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
+                            if (temp > power) {
+                                index++;
+                            } else if (temp == power) {
+                                list.set(index, (tempCoef + coef) + " " + power);
+                            } else {
+                                list.add(index, line);
+                            }
+                        }
+                    } else {
+                        list.add(line);
+                    }
                 }
                 polyLists.add(list);
             }
@@ -52,6 +72,13 @@ public class P1_SVP {
         }
     }
 
+    public void printPolys() {
+        for (int i = 0; i < polyLists.getSize(); i++) {
+            System.out.print("P1: ");
+            for (int j = 0; j < polyLists.get(i).getSize()-1; j++) {
 
+            }
+        }
+    }
 
 }

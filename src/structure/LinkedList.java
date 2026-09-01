@@ -357,4 +357,12 @@ public class LinkedList<E> {
         return false;
     }
 
+    /**
+     * Method that returns the size in an int of the LinkedList
+     * @return size of LinkedList as an int
+     */
+    public int getSize() {
+        return size;
+    }
+
 }
