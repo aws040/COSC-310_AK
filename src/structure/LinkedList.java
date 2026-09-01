@@ -99,7 +99,7 @@ public class LinkedList<E> {
      * @param data element to be added to LinkedList
      */
     public void add(int index, E data) {
-        if (index < 0 || index > size) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index must be between 0 and " + (size - 1));
         }
         if (index == 0) {
@@ -127,7 +127,7 @@ public class LinkedList<E> {
      */
     private void addFirst(E data) {
         Node<E> newNode = new Node<>(data);
-        if (head == null) {
+        if (size == 0) {
             head = newNode;
             tail = newNode;
         }  else if  (head.next == null) {
@@ -154,7 +154,6 @@ public class LinkedList<E> {
             head = newNode;
             tail = newNode;
         }  else if (head == tail) {
-            Node<E> prev = tail;
             head.setNext(newNode);
             newNode.setPrev(head);
             tail = newNode;
@@ -162,7 +161,7 @@ public class LinkedList<E> {
             Node<E> prev = tail;
             prev.setNext(newNode);
             newNode.setPrev(prev);
-            tail =  newNode;
+            tail = newNode;
         }
     }
     //Methods to remove from the LinkedList
@@ -278,6 +277,7 @@ public class LinkedList<E> {
         size--;
         return e;
     }
+    //General use methods
 
     /**
      * Gets an element at the given index

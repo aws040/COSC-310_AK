@@ -1,6 +1,8 @@
 package main;
 
-import practice.P1_SVP;
+import project.P1_SVP;
+
+import java.io.File;
 
 /**
  * @author Alejandro Borroni
@@ -9,6 +11,8 @@ import practice.P1_SVP;
 public class Main {
 	public static void main(String[] args) {
         P1_SVP p1 = new P1_SVP();
+        File file = new File("../P1_SVP_Input.txt");
+        p1.addPolys(file);
         //test
     }
 }
