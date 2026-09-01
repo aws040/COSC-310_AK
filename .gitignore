@@ -1,9 +1,22 @@
-/bin/
+### IntelliJ IDEA ###
 out/
-*.class
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
 
-# Ignore IntelliJ-specific files
-.idea/
-*.iml
-*.iws
-*.ipr
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
