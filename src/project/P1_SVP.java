@@ -2,7 +2,7 @@ package project;
 
 
 import main.Main;
-import structure.LinkedList;
+import structure.DoublyLinkedList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +17,7 @@ import java.util.Scanner;
  * @version 2026.09.2.11
  */
 public class P1_SVP {
-    private LinkedList<LinkedList<String>> polyLists = new LinkedList<>();
+    private DoublyLinkedList<DoublyLinkedList<String>> polyLists = new DoublyLinkedList<>();
 
     /**
      * Method to add polynomials from a txt file with a given format.
@@ -33,7 +33,7 @@ public class P1_SVP {
                 if (chunk.isEmpty()) {
                     continue;
                 }
-                LinkedList<String> list = getStringLinkedList(chunk);
+                DoublyLinkedList<String> list = getStringLinkedList(chunk);
                 polyLists.add(list);
             }
             sc.close();
@@ -58,10 +58,10 @@ public class P1_SVP {
      * @param chunk any string
      * @return the list that was made using the string provided
      */
-    private static LinkedList<String> getStringLinkedList(String chunk) {
+    private static DoublyLinkedList<String> getStringLinkedList(String chunk) {
         Scanner sc2 = new Scanner(chunk);
         sc2.useDelimiter("\r\n");
-        LinkedList<String> list = new LinkedList<>();
+        DoublyLinkedList<String> list = new DoublyLinkedList<>();
         while (sc2.hasNext()) {
             String line = sc2.next();
             int tempPo = Integer.parseInt(line.substring(line.indexOf(" ")+1));

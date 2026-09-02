@@ -2,14 +2,14 @@ package structure;
 
 import java.util.NoSuchElementException;
 
-/**LinkedList that can travel both backword and forward in the list from the tail or head.
+/**DoublyLinkedList that can travel both backword and forward in the list from the tail or head.
  *
  * @param <E> Element type to be stored in the list
  * @author Alejandro Borroni
  * @version 2026.09.2.11
  */
-public class LinkedList<E> {
-    /**Node Structure for the LinkedList. Opted for a LinkedList that could go back and forth both ways.
+public class DoublyLinkedList<E> {
+    /**Node Structure for the DoublyLinkedList. Opted for a DoublyLinkedList that could go back and forth both ways.
      *
      * @param <E> The element type stored in Node
      */
@@ -49,17 +49,17 @@ public class LinkedList<E> {
     private int size;
 
     //Constructors
-    public LinkedList() {
+    public DoublyLinkedList() {
         head = null;
         tail = null;
         size = 0;
     }
-    public LinkedList(E data) {
+    public DoublyLinkedList(E data) {
         Node<E> newNode = new Node<>(data);
         head = newNode;
         tail = newNode;
     }
-    public LinkedList(E[] data) {
+    public DoublyLinkedList(E[] data) {
         for (E datum : data) {
             Node<E> newNode = new Node<>(datum);
             if (head == null) {
@@ -80,11 +80,11 @@ public class LinkedList<E> {
             }
         }
     }
-    //Methods to add to the LinkedList
+    //Methods to add to the DoublyLinkedList
 
     /**
      * Adds the element given to the end of the list
-     * @param data element to be added to LinkedList
+     * @param data element to be added to DoublyLinkedList
      */
     public void add(E data) {
         if (head == null) {
@@ -98,7 +98,7 @@ public class LinkedList<E> {
     /**
      * Adds the element given to the index given of the list
      * @param index index of element location to be placed
-     * @param data element to be added to LinkedList
+     * @param data element to be added to DoublyLinkedList
      */
     public void add(int index, E data) {
         if (index < 0 || index >= size) {
@@ -129,7 +129,7 @@ public class LinkedList<E> {
 
     /**
      * Private method for adding to the first of the list.
-     * @param data element to be added to the LinkedList
+     * @param data element to be added to the DoublyLinkedList
      */
     private void addFirst(E data) {
         Node<E> newNode = new Node<>(data);
@@ -152,7 +152,7 @@ public class LinkedList<E> {
 
     /**
      * Private method for adding element to the tail of the list
-     * @param data element to be added to LinkedList
+     * @param data element to be added to DoublyLinkedList
      */
     private void addLast(E data) {
         Node<E> newNode = new Node<>(data);
@@ -170,10 +170,10 @@ public class LinkedList<E> {
             tail = newNode;
         }
     }
-    //Methods to remove from the LinkedList
+    //Methods to remove from the DoublyLinkedList
 
     /**
-     * Removes the element at index form the LinkedList
+     * Removes the element at index form the DoublyLinkedList
      * @param index the index of the element to be removed
      * @return the removed element
      */
@@ -205,7 +205,7 @@ public class LinkedList<E> {
     }
 
     /**
-     * If no index is specified, remove the first element from the LinkedList
+     * If no index is specified, remove the first element from the DoublyLinkedList
      *
      * @return the removed element
      */
@@ -218,24 +218,24 @@ public class LinkedList<E> {
             throw new NoSuchElementException("List is empty");
         }
         if (head == tail) {
-            if (head.data.equals(data)) {
+            if (((Comparable<E>)(head.data)).compareTo(data) == 0) {
                 return removeFirst();
             } else  {
                 throw new NoSuchElementException("Element does not exist in list");
             }
         }
-        if (head.data.equals(data)) {
+        if (((Comparable<E>)(head.data)).compareTo(data) == 0) {
             return removeFirst();
         }
         Node<E> current = head.next;
         for (int i = 1; i < size-1; i++) {
-            if (current.data.equals(data)) {
+            if (((Comparable<E>)(current.data)).compareTo(data) == 0) {
                 return remove(i);
             } else {
                 current = current.next;
             }
         }
-        if (current == tail && current.data.equals(data)) {
+        if (current == tail && ((Comparable<E>)(current.data)).compareTo(data) == 0) {
             return removeLast();
         } else {
             throw new NoSuchElementException("Element does not exist in list");
@@ -243,7 +243,7 @@ public class LinkedList<E> {
     }
 
     /**
-     * Removes the first element of the LinkedList
+     * Removes the first element of the DoublyLinkedList
      * @return the removed element
      */
     private E removeFirst() {
@@ -270,7 +270,7 @@ public class LinkedList<E> {
     }
 
     /**
-     * Removes the last element of the LinkedList
+     * Removes the last element of the DoublyLinkedList
      * @return the removed element
      */
     private E removeLast() {
@@ -332,9 +332,9 @@ public class LinkedList<E> {
     }
 
     /**
-     * Searches the LinkedList for the element given
+     * Searches the DoublyLinkedList for the element given
      * @param data element to be searched for
-     * @return index of element found in LinkedList, otherwise -1 is returned
+     * @return index of element found in DoublyLinkedList, otherwise -1 is returned
      */
     public int indexOf(E data) {
         if (head == null) {
@@ -342,13 +342,13 @@ public class LinkedList<E> {
         }
         Node<E> current = head;
         int index = 0;
-        if (head.data.equals(data)) {
+        if (((Comparable<E>)(head.data)).compareTo(data) == 0) {
             return index;
         }
         for (int i = 0; i < size; i++) {
             index++;
             current = current.next;
-            if (current.data.equals(data)) {
+            if (((Comparable<E>)(current.data)).compareTo(data) == 0) {
                 return index;
             }
         }
@@ -356,13 +356,13 @@ public class LinkedList<E> {
     }
 
     /**
-     * Searches the LinkedList for the element given
+     * Searches the DoublyLinkedList for the element given
      * @param data element to be searched for
-     * @return true if element is found in LinkedList, false otherwise
+     * @return true if element is found in DoublyLinkedList, false otherwise
      */
     public boolean contains(E data) {
         for (Node<E> current = head; current != null; current = current.next) {
-            if (current.data.equals(data)) {
+            if (((Comparable<E>)(current.data)).compareTo(data) == 0) {
                 return true;
             }
         }
@@ -370,8 +370,8 @@ public class LinkedList<E> {
     }
 
     /**
-     * Method that returns the size in an int of the LinkedList
-     * @return size of LinkedList as an int
+     * Method that returns the size in an int of the DoublyLinkedList
+     * @return size of DoublyLinkedList as an int
      */
     public int getSize() {
         return size;
