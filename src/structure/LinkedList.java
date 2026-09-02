@@ -104,9 +104,9 @@ public class LinkedList<E> {
         }
         if (index == 0) {
             addFirst(data);
-        } else if (index == size -1) {
+        } else if (index == 1 && size == 1) {
             addLast(data);
-        }  else {
+        } else {
             Node<E> newNode = new Node<>(data);
             Node<E> current = head;
             for (int i = 1; i <= index; i++) {

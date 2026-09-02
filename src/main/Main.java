@@ -13,6 +13,7 @@ public class Main {
         P1_SVP p1 = new P1_SVP();
         File file = new File("../P1_SVP_Input.txt");
         p1.addPolys(file);
+        p1.printPolys();
         //test
     }
 }
