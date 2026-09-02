@@ -54,22 +54,27 @@ public class P1_SVP {
         LinkedList<String> list = new LinkedList<>();
         while (sc2.hasNext()) {
             String line = sc2.next();
-            int temp = Integer.parseInt(line.substring(line.indexOf(" ")+1));
+            int tempPo = Integer.parseInt(line.substring(line.indexOf(" ")+1));
             int tempCoef = Integer.parseInt(line.substring(0, line.indexOf(" ")));
-            int index = 0;
             if (list.getSize() > 0) {
                 int size = list.getSize();
+                boolean add = false;
                 for (int i = 0; i < size; i++) {
                     String item = list.get(i);
                     int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
                     int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
-                    if (temp > power) {
-                        index++;
-                    } else if (temp == power) {
-                        list.set(index, (tempCoef + coef) + " " + power);
-                    } else {
-                        list.add(line);
+                    if (tempPo < power) {
+                        list.add(i, line);
+                        add = true;
+                        break;
+                    } else if (tempPo == power) {
+                        list.set(i, (tempCoef + coef) + " " + power);
+                        add = true;
+                        break;
                     }
+                }
+                if (!add) {
+                    list.add(line);
                 }
             } else {
                 list.add(line);
@@ -81,13 +86,34 @@ public class P1_SVP {
 
     public void printPolys() {
         for (int i = 0; i < polyLists.getSize(); i++) {
-            System.out.print("P1: ");
-            for (int j = 1; j < polyLists.get(i).getSize()-1; j++) {
-                System.out.print(polyLists.get(i).get(j) + " ");
+            int size = polyLists.get(i).getSize()-1;
+            System.out.printf("P%d: ", i+1);
+            StringBuilder poly = new StringBuilder();
+            for (int j = 0; j < size; j++) {
+                poly.append(toString(i, j));
             }
-            System.out.print(polyLists.get(i).get(polyLists.get(i).getSize()-1));
-            System.out.println();
+            poly.append(toString(i, size));
+            System.out.println(poly);
         }
+    }
+
+    private String toString(int i, int size) {
+        String item = polyLists.get(i).get(size);
+        int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
+        int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
+        String end = "";
+        if (power == 0) {
+            end = end + coef + " ";
+        } else if (power == 1) {
+            end = end + coef + "x ";
+        } else if (power == -1) {
+            end = end + coef + "x^-1 ";
+        } else if (power > 1) {
+            end = end + coef + "x^" + power + " ";
+        } else {
+            end = end + coef + "x^" + power + " ";
+        }
+        return end;
     }
 
 }

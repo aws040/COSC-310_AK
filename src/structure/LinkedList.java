@@ -104,12 +104,16 @@ public class LinkedList<E> {
         }
         if (index == 0) {
             addFirst(data);
-        } else if (index == 1 && size == 1) {
-            addLast(data);
+        } else if (index == size - 1) {
+            Node<E> newNode = new Node<>(data);
+            newNode.setNext(tail);
+            newNode.setPrev(tail.prev);
+            tail.prev.setNext(newNode);
+            tail.setPrev(newNode);
         } else {
             Node<E> newNode = new Node<>(data);
             Node<E> current = head;
-            for (int i = 1; i <= index; i++) {
+            for (int i = 1; i < index; i++) {
                 current = current.next;
             }
             Node<E> prev = current.prev;
@@ -127,7 +131,7 @@ public class LinkedList<E> {
      */
     private void addFirst(E data) {
         Node<E> newNode = new Node<>(data);
-        if (size == 0) {
+        if (head == null) {
             head = newNode;
             tail = newNode;
         }  else if  (head.next == null) {
