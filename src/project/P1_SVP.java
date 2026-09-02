@@ -14,10 +14,11 @@ import java.util.Scanner;
 /**
  * Class that can take polynomials, print them and then multiply them and print the results.
  * @author Alejandro Borroni
- * @version 2026.09.2.11
+ * @version 2026.09.2.18
  */
 public class P1_SVP {
     private DoublyLinkedList<DoublyLinkedList<String>> polyLists = new DoublyLinkedList<>();
+    private DoublyLinkedList<String> multiPolyList = new DoublyLinkedList<>();
 
     /**
      * Method to add polynomials from a txt file with a given format.
@@ -100,7 +101,7 @@ public class P1_SVP {
     }
 
     /**
-     * This method with print out the entire list of polynomials separated.
+     * This method to print out the entire list of polynomials separated.
      */
     public void printPolys() {
         for (int i = 0; i < polyLists.getSize(); i++) {
@@ -108,7 +109,7 @@ public class P1_SVP {
             System.out.printf("P%d: ", i+1);
             StringBuilder poly = new StringBuilder();
             for (int j = 0; j < size; j++) {
-                String var = toString(i, j);
+                String var = toString(i, j, polyLists);
                 if (j != 0) {
                     if (var.indexOf("-") == 0) {
                         var = "- " + var.substring(1);
@@ -118,7 +119,7 @@ public class P1_SVP {
                 }
                 poly.append(var);
             }
-            String var = toString(i, size);
+            String var = toString(i, size, polyLists);
             if (var.indexOf("-") == 0) {
                 var = "- " + var.substring(1);
             } else {
@@ -132,11 +133,32 @@ public class P1_SVP {
     /**
      * ToString method used by printPolys() to allow an easier time to turn the polys into strings to be printed.
      * @param i taken as index of the poly list to be used.
-     * @param size taken as the size of the list that is to be turned into a string
+     * @param j taken as the index of the string within the double list
+     * @param polyList taken as a DoublyLinkedList within a DoublyLinkedList containing strings in an improper format
      * @return the string of the poly in the list as a base polynomial
      */
-    private String toString(int i, int size) {
-        String item = polyLists.get(i).get(size);
+    private String toString(int i, int j, DoublyLinkedList<DoublyLinkedList<String>> polyList) {
+        String item = polyList.get(i).get(j);
+        return getString(item);
+    }
+
+    /**
+     * toString method used by printMultiPoly() to allow and easier time to turn the poly into a string.
+     * @param i taken as the index of the string within the list
+     * @param polyList a DoublyLinkedList containing strings in an improper format
+     * @return the string in a proper format
+     */
+    private String toString(int i, DoublyLinkedList<String> polyList) {
+        String item = polyList.get(i);
+        return getString(item);
+    }
+
+    /**
+     * Private method for the toString taking a string and turning that string, if it is in teh right format, into a polynomial
+     * @param item a string to be turned into proper printable format
+     * @return the string in proper printable format
+     */
+    private String getString(String item) {
         int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
         int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
         String end = "";
@@ -154,4 +176,59 @@ public class P1_SVP {
         return end;
     }
 
+    /**
+     * Multiples the polynomials given to this class together and stores them in a final list as a result.
+     */
+    public void multiplyPolys() {
+        StringBuilder complete = new StringBuilder();
+        for (int i = 0; i < polyLists.getSize(); i++) {
+            for (int j = i + 1;  j < polyLists.getSize(); j++) {
+                for (int k = 0; k < polyLists.get(i).getSize(); k++) {
+                    // Getting the coefficient and power and multiplying it by the other polynomials variables
+                    String multi = polyLists.get(i).get(k);
+                    int multiPower = Integer.parseInt(multi.substring(multi.indexOf(" ")+1));
+                    int multiCoef = Integer.parseInt(multi.substring(0, multi.indexOf(" ")));
+                    for(int l = 0; l < polyLists.get(j).getSize(); l++) {
+                        String item = polyLists.get(j).get(l);
+                        int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
+                        int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
+                        int finCoef = multiCoef * coef;
+                        int finPower = multiPower + power;
+                        String vari = finCoef + " " + finPower + "\r\n";
+                        complete.append(vari);
+                    }
+                }
+            }
+        }
+        multiPolyList = getStringLinkedList(complete.toString());
+    }
+
+    /**
+     * Prints the multiplied polynomials out
+     */
+    public void printMultiPoly() {
+        int size = multiPolyList.getSize()-1;
+        System.out.print("Product: ");
+        StringBuilder poly = new StringBuilder();
+        String var;
+        for (int j = 0; j < size; j++) {
+                var = toString(j, multiPolyList);
+                if (j != 0) {
+                    if (var.indexOf("-") == 0) {
+                        var = "- " + var.substring(1);
+                    } else {
+                        var = "+ " + var;
+                    }
+                }
+                poly.append(var);
+            }
+            var = toString(size, multiPolyList);
+            if (var.indexOf("-") == 0) {
+                var = "- " + var.substring(1);
+            } else {
+                var = "+ " + var;
+            }
+            poly.append(var);
+            System.out.println(poly);
+    }
 }

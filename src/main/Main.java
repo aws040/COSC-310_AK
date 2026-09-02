@@ -6,7 +6,7 @@ import java.io.File;
 
 /**
  * @author Alejandro Borroni
- * @version 2026.08.31.11
+ * @version 2026.09.2.18
  */
 public class Main {
 	public static void main(String[] args) {
@@ -14,6 +14,8 @@ public class Main {
         File file = new File("../P1_SVP_Input.txt");
         p1.addPolys(file);
         p1.printPolys();
+        p1.multiplyPolys();
+        p1.printMultiPoly();
         //test
     }
 }

@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
  * @author Alejandro Borroni
  * @version 2026.09.2.11
  */
+@SuppressWarnings("unchecked")
 public class DoublyLinkedList<E> {
     /**Node Structure for the DoublyLinkedList. Opted for a DoublyLinkedList that could go back and forth both ways.
      *
@@ -23,7 +24,7 @@ public class DoublyLinkedList<E> {
 
         /**Default Contractor
          *
-         * @param data element to be added to node
+         * @param data element to be added to node, should only be the same type as {@code <E>}
          */
         public Node(E data) {
             this.data = data;
@@ -54,11 +55,21 @@ public class DoublyLinkedList<E> {
         tail = null;
         size = 0;
     }
+
+    /**
+     * Default construct for single node in list.
+     * @param data element to be placed in Node, should only be the same type as {@code <E>}
+     */
     public DoublyLinkedList(E data) {
         Node<E> newNode = new Node<>(data);
         head = newNode;
         tail = newNode;
     }
+
+    /**
+     * Constructor for DoublyLinkedList which can take an arr and separate the values in different nodes
+     * @param data take as an arr of elements, arr elements should only be the same type as {@code <E>}
+     */
     public DoublyLinkedList(E[] data) {
         for (E datum : data) {
             Node<E> newNode = new Node<>(datum);
@@ -213,6 +224,11 @@ public class DoublyLinkedList<E> {
         return removeFirst();
     }
 
+    /**
+     * Removes the data provided from the DoublyLinkedList if found, otherwise throw NoSUchElementException.
+     * @param data Element to be checked and removed, should only be the same type as {@code <E>}
+     * @return the removed element for potional later use
+     */
     public E remove(E data) {
         if (head == null) {
             throw new NoSuchElementException("List is empty");
@@ -357,7 +373,7 @@ public class DoublyLinkedList<E> {
 
     /**
      * Searches the DoublyLinkedList for the element given
-     * @param data element to be searched for
+     * @param data element to be searched for, should only be the same type as {@code <E>}
      * @return true if element is found in DoublyLinkedList, false otherwise
      */
     public boolean contains(E data) {
