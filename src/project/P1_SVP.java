@@ -12,12 +12,17 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
+ * Class that can take polynomials, print them and then multiply them and print the results.
  * @author Alejandro Borroni
- * @version 2026.09.1.16
+ * @version 2026.09.2.11
  */
 public class P1_SVP {
     private LinkedList<LinkedList<String>> polyLists = new LinkedList<>();
 
+    /**
+     * Method to add polynomials from a txt file with a given format.
+     * @param file is the file to be read, has to be in a given format or method won't work as intended
+     */
     public void addPolys(File file) {
         Scanner sc;
         try {
@@ -48,6 +53,11 @@ public class P1_SVP {
         }
     }
 
+    /**
+     * This method takes a chunk of String and then uses a scanner and cuts up the string based on the new line pattern in notepad.
+     * @param chunk any string
+     * @return the list that was made using the string provided
+     */
     private static LinkedList<String> getStringLinkedList(String chunk) {
         Scanner sc2 = new Scanner(chunk);
         sc2.useDelimiter("\r\n");
@@ -68,6 +78,11 @@ public class P1_SVP {
                         add = true;
                         break;
                     } else if (tempPo == power) {
+                        if (tempCoef + coef == 0) {
+                            list.remove(i);
+                            add = true;
+                            break;
+                        }
                         list.set(i, (tempCoef + coef) + " " + power);
                         add = true;
                         break;
@@ -84,19 +99,42 @@ public class P1_SVP {
         return list;
     }
 
+    /**
+     * This method with print out the entire list of polynomials separated.
+     */
     public void printPolys() {
         for (int i = 0; i < polyLists.getSize(); i++) {
             int size = polyLists.get(i).getSize()-1;
             System.out.printf("P%d: ", i+1);
             StringBuilder poly = new StringBuilder();
             for (int j = 0; j < size; j++) {
-                poly.append(toString(i, j));
+                String var = toString(i, j);
+                if (j != 0) {
+                    if (var.indexOf("-") == 0) {
+                        var = "- " + var.substring(1);
+                    } else {
+                        var = "+ " + var;
+                    }
+                }
+                poly.append(var);
             }
-            poly.append(toString(i, size));
+            String var = toString(i, size);
+            if (var.indexOf("-") == 0) {
+                var = "- " + var.substring(1);
+            } else {
+                var = "+ " + var;
+            }
+            poly.append(var);
             System.out.println(poly);
         }
     }
 
+    /**
+     * ToString method used by printPolys() to allow an easier time to turn the polys into strings to be printed.
+     * @param i taken as index of the poly list to be used.
+     * @param size taken as the size of the list that is to be turned into a string
+     * @return the string of the poly in the list as a base polynomial
+     */
     private String toString(int i, int size) {
         String item = polyLists.get(i).get(size);
         int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));

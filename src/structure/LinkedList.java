@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 /**LinkedList that can travel both backword and forward in the list from the tail or head.
  *
  * @param <E> Element type to be stored in the list
+ * @author Alejandro Borroni
+ * @version 2026.09.2.11
  */
 public class LinkedList<E> {
     /**Node Structure for the LinkedList. Opted for a LinkedList that could go back and forth both ways.
@@ -179,9 +181,14 @@ public class LinkedList<E> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index must be between 0 and " + (size - 1));
         } else if (index == 0) {
+            size--;
             return removeFirst();
         }  else if (index == size - 1) {
-            return removeLast();
+            Node<E> temp = tail;
+            tail = tail.prev;
+            tail.setNext(null);
+            size--;
+            return temp.data;
         }  else {
             Node<E> current = head;
             for (int i = 1; i <= index; i++) {
@@ -192,6 +199,7 @@ public class LinkedList<E> {
             Node<E> next = current.next;
             next.setPrev(prev);
             current.next.prev = null;
+            size--;
             return current.data;
         }
     }
