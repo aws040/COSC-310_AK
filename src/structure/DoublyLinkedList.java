@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
  *
  * @param <E> Element type to be stored in the list
  * @author Alejandro Borroni
- * @version 2026.09.2.11
+ * @version 2026.09.2.22
  */
 @SuppressWarnings("unchecked")
 public class DoublyLinkedList<E> implements Iterable<E>{
@@ -66,7 +66,7 @@ public class DoublyLinkedList<E> implements Iterable<E>{
     }
 
     /**
-     * Iterator class to make traversing my DoublyLinkedList easier and more time efficient
+     * Iterator class to make traversing the DoublyLinkedList easier and more time efficient
      */
     private class PolyIterator implements Iterator<E> {
         Node<E> cursor = head;

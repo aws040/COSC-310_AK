@@ -14,7 +14,7 @@ import java.util.Scanner;
 /**
  * Class that can take polynomials, print them and then multiply them and print the results.
  * @author Alejandro Borroni
- * @version 2026.09.2.18
+ * @version 2026.09.2.22
  */
 public class P1_SVP {
     private DoublyLinkedList<DoublyLinkedList<Term>> polyLists = new DoublyLinkedList<>();
@@ -54,11 +54,21 @@ public class P1_SVP {
         }
     }
 
+    /**
+     * Method extracted from a different method to allow better reuse of code. Compares two terms and then adds termA ti
+     * the list provided at the given index IF its power is less than. Otherwise, combines both coefficients if the powers are equals
+     * and removes both terms from the list if the coefficients combined equal 0. Will return a boolean based on if it added/removed from the list
+     * @param termA the first term to be compared to the one in the list
+     * @param termB the second term coming from the list to be compared
+     * @param list the list itself to be modified
+     * @param index the index of termB to help decrease search time
+     * @return true if termA was added, or if termB was removed from the list. false if nothing was done as termA's power was greater.
+     */
     private static boolean compareTerms(Term termA, Term termB, DoublyLinkedList<Term> list, int index) {
-        int tempPo = termA.getExponent();
-        int power = termB.getExponent();
-        int tempCoef = termA.getCoefficient();
-        int coef = termB.getCoefficient();
+        int tempPo = termA.exponent();
+        int power = termB.exponent();
+        int tempCoef = termA.coefficient();
+        int coef = termB.coefficient();
         if (tempPo < power) {
             list.add(index, termA);
             return true;
@@ -86,7 +96,13 @@ public class P1_SVP {
             String[] split = line.split(" ");
             int tempPo = Integer.parseInt(split[1]);
             int tempCoef = Integer.parseInt(split[0]);
-            Term termA = new Term(tempCoef, tempPo);
+            Term termA;
+            try {
+                termA = new Term(tempCoef, tempPo);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid coefficient: 0, skipping coefficient");
+                continue;
+            }
             if (list.getSize() > 0) {
                 boolean add = false;
                 int index = 0;
@@ -139,8 +155,8 @@ public class P1_SVP {
      * @return the string in proper printable format
      */
     private String toString(Term item) {
-        int coef = item.getCoefficient();
-        int power = item.getExponent();
+        int coef = item.coefficient();
+        int power = item.exponent();
         String end = "";
         if (power == 0) {
             end = end + coef + " ";
@@ -180,14 +196,20 @@ public class P1_SVP {
         multiPolyList = result;
     }
 
+    /**
+     * Takes two list of polynomials and multiples them together and then returns that result
+     * @param poly1 the first polynomial
+     * @param poly2 the second polynomial
+     * @return the result of the two polynomials
+     */
     private DoublyLinkedList<Term> multiplyPolys(DoublyLinkedList<Term> poly1, DoublyLinkedList<Term> poly2) {
         DoublyLinkedList<Term> result = new DoublyLinkedList<>();
         for (Term termA : poly1) {
-            int coefA = termA.getCoefficient();
-            int powerA = termA.getExponent();
+            int coefA = termA.coefficient();
+            int powerA = termA.exponent();
             for (Term termB : poly2) {
-                int coefB = termB.getCoefficient();
-                int powerB = termB.getExponent();
+                int coefB = termB.coefficient();
+                int powerB = termB.exponent();
                 int newCoef = coefA * coefB;
                 int newPower = powerA + powerB;
                 Term termC = new Term(newCoef, newPower);
