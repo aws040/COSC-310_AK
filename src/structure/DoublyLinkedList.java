@@ -1,5 +1,6 @@
 package structure;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**DoublyLinkedList that can travel both backword and forward in the list from the tail or head.
@@ -9,9 +10,14 @@ import java.util.NoSuchElementException;
  * @version 2026.09.2.11
  */
 @SuppressWarnings("unchecked")
-public class DoublyLinkedList<E> {
-    /**Node Structure for the DoublyLinkedList. Opted for a DoublyLinkedList that could go back and forth both ways.
-     *
+public class DoublyLinkedList<E> implements Iterable<E>{
+    //Data fields
+    private Node<E> head;
+    private Node<E> tail;
+    private int size;
+
+    /**
+     * Node Structure for the DoublyLinkedList. Opted for a DoublyLinkedList that could go back and forth both ways
      * @param <E> The element type stored in Node
      */
     public static class Node<E> {
@@ -32,6 +38,12 @@ public class DoublyLinkedList<E> {
             this.prev = null;
         }
 
+        public Node(E data, Node<E> next, Node<E> prev) {
+            this.data = data;
+            this.next = next;
+            this.prev = prev;
+        }
+
         //Setters
         public void setData(E data) {
             this.data = data;
@@ -43,11 +55,32 @@ public class DoublyLinkedList<E> {
             this.prev = prev;
         }
     }
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new PolyIterator();
+    }
 
-    //Data fields
-    private Node<E> head;
-    private Node<E> tail;
-    private int size;
+    /**
+     * Iterator class to make traversing my DoublyLinkedList easier and more time efficient
+     */
+    private class PolyIterator implements Iterator<E> {
+        Node<E> cursor = head;
+
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        public E next() {
+            E element = cursor.data;
+            cursor = cursor.next;
+            return element;
+        }
+    }
 
     //Constructors
     public DoublyLinkedList() {
@@ -91,6 +124,7 @@ public class DoublyLinkedList<E> {
             }
         }
     }
+
     //Methods to add to the DoublyLinkedList
 
     /**
@@ -117,6 +151,10 @@ public class DoublyLinkedList<E> {
         }
         if (index == 0) {
             addFirst(data);
+        } else if (index == 1) {
+            Node<E> newNode = new Node<>(data, tail, head);
+            head.setNext(newNode);
+            tail.setPrev(newNode);
         } else if (index == size - 1) {
             Node<E> newNode = new Node<>(data);
             newNode.setNext(tail);
@@ -192,14 +230,9 @@ public class DoublyLinkedList<E> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index must be between 0 and " + (size - 1));
         } else if (index == 0) {
-            size--;
             return removeFirst();
         }  else if (index == size - 1) {
-            Node<E> temp = tail;
-            tail = tail.prev;
-            tail.setNext(null);
-            size--;
-            return temp.data;
+            return removeLast();
         }  else {
             Node<E> current = head;
             for (int i = 1; i <= index; i++) {
@@ -266,12 +299,10 @@ public class DoublyLinkedList<E> {
         E e;
         if (head == null) {
             throw new NoSuchElementException("List is empty");
-        }
-        if (head == tail) {
+        } else if (head == tail) {
             e = head.data;
             head = tail = null;
-        }
-        if (head.next == tail) {
+        } else if (head.next == tail) {
             e = head.data;
             head.setNext(null);
             tail.setPrev(null);
@@ -293,8 +324,7 @@ public class DoublyLinkedList<E> {
         E e;
         if (head == null) {
             throw new NoSuchElementException("List is empty");
-        }
-        if (head == tail) {
+        } else if (head == tail) {
             e = tail.data;
             head = tail = null;
         }  else {
@@ -393,4 +423,17 @@ public class DoublyLinkedList<E> {
         return size;
     }
 
+    public E getLast() {
+        if (head == null) {
+            throw new NoSuchElementException("List is empty");
+        }
+        return tail.data;
+    }
+
+    public E getFirst() {
+        if (head == null) {
+            throw new NoSuchElementException("List is empty");
+        }
+        return head.data;
+    }
 }

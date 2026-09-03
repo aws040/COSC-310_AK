@@ -16,6 +16,5 @@ public class Main {
         p1.printPolys();
         p1.multiplyPolys();
         p1.printMultiPoly();
-        //test
     }
 }

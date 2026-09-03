@@ -17,8 +17,8 @@ import java.util.Scanner;
  * @version 2026.09.2.18
  */
 public class P1_SVP {
-    private DoublyLinkedList<DoublyLinkedList<String>> polyLists = new DoublyLinkedList<>();
-    private DoublyLinkedList<String> multiPolyList = new DoublyLinkedList<>();
+    private DoublyLinkedList<DoublyLinkedList<Term>> polyLists = new DoublyLinkedList<>();
+    private DoublyLinkedList<Term> multiPolyList = new DoublyLinkedList<>();
 
     /**
      * Method to add polynomials from a txt file with a given format.
@@ -34,7 +34,7 @@ public class P1_SVP {
                 if (chunk.isEmpty()) {
                     continue;
                 }
-                DoublyLinkedList<String> list = getStringLinkedList(chunk);
+                DoublyLinkedList<Term> list = getStringLinkedList(chunk);
                 polyLists.add(list);
             }
             sc.close();
@@ -54,49 +54,56 @@ public class P1_SVP {
         }
     }
 
+    private static boolean compareTerms(Term termA, Term termB, DoublyLinkedList<Term> list, int index) {
+        int tempPo = termA.getExponent();
+        int power = termB.getExponent();
+        int tempCoef = termA.getCoefficient();
+        int coef = termB.getCoefficient();
+        if (tempPo < power) {
+            list.add(index, termA);
+            return true;
+        } else if (tempPo == power) {
+            if (tempCoef + coef == 0) {
+                list.remove(index);
+                return true;
+            }
+            Term termC = new Term(tempCoef + coef, tempPo);
+            list.set(index, termC);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * This method takes a chunk of String and then uses a scanner and cuts up the string based on the new line pattern in notepad.
      * @param chunk any string
      * @return the list that was made using the string provided
      */
-    private static DoublyLinkedList<String> getStringLinkedList(String chunk) {
-        Scanner sc2 = new Scanner(chunk);
-        sc2.useDelimiter("\r\n");
-        DoublyLinkedList<String> list = new DoublyLinkedList<>();
-        while (sc2.hasNext()) {
-            String line = sc2.next();
-            int tempPo = Integer.parseInt(line.substring(line.indexOf(" ")+1));
-            int tempCoef = Integer.parseInt(line.substring(0, line.indexOf(" ")));
+    private static DoublyLinkedList<Term> getStringLinkedList(String chunk) {
+        DoublyLinkedList<Term> list = new DoublyLinkedList<>();
+        String[] sc2 = chunk.split("\r?\n");
+        for (String line : sc2) {
+            String[] split = line.split(" ");
+            int tempPo = Integer.parseInt(split[1]);
+            int tempCoef = Integer.parseInt(split[0]);
+            Term termA = new Term(tempCoef, tempPo);
             if (list.getSize() > 0) {
-                int size = list.getSize();
                 boolean add = false;
-                for (int i = 0; i < size; i++) {
-                    String item = list.get(i);
-                    int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
-                    int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
-                    if (tempPo < power) {
-                        list.add(i, line);
-                        add = true;
-                        break;
-                    } else if (tempPo == power) {
-                        if (tempCoef + coef == 0) {
-                            list.remove(i);
-                            add = true;
-                            break;
-                        }
-                        list.set(i, (tempCoef + coef) + " " + power);
-                        add = true;
+                int index = 0;
+                for (Term termB : list) {
+                    add = compareTerms(termA, termB, list, index);
+                    if (add) {
                         break;
                     }
+                    index++;
                 }
                 if (!add) {
-                    list.add(line);
+                    list.add(termA);
                 }
             } else {
-                list.add(line);
+                list.add(termA);
             }
         }
-        sc2.close();
         return list;
     }
 
@@ -104,13 +111,14 @@ public class P1_SVP {
      * This method to print out the entire list of polynomials separated.
      */
     public void printPolys() {
-        for (int i = 0; i < polyLists.getSize(); i++) {
-            int size = polyLists.get(i).getSize()-1;
-            System.out.printf("P%d: ", i+1);
+        int index = 0;
+        for (DoublyLinkedList<Term> term : polyLists) {
+            System.out.printf("P%d: ", index+1);
             StringBuilder poly = new StringBuilder();
-            for (int j = 0; j < size; j++) {
-                String var = toString(i, j, polyLists);
-                if (j != 0) {
+            int loc = 0;
+            for (Term termB : term) {
+                String var = toString(termB);
+                if (loc != 0) {
                     if (var.indexOf("-") == 0) {
                         var = "- " + var.substring(1);
                     } else {
@@ -118,39 +126,11 @@ public class P1_SVP {
                     }
                 }
                 poly.append(var);
+                loc++;
             }
-            String var = toString(i, size, polyLists);
-            if (var.indexOf("-") == 0) {
-                var = "- " + var.substring(1);
-            } else {
-                var = "+ " + var;
-            }
-            poly.append(var);
             System.out.println(poly);
+            index++;
         }
-    }
-
-    /**
-     * ToString method used by printPolys() to allow an easier time to turn the polys into strings to be printed.
-     * @param i taken as index of the poly list to be used.
-     * @param j taken as the index of the string within the double list
-     * @param polyList taken as a DoublyLinkedList within a DoublyLinkedList containing strings in an improper format
-     * @return the string of the poly in the list as a base polynomial
-     */
-    private String toString(int i, int j, DoublyLinkedList<DoublyLinkedList<String>> polyList) {
-        String item = polyList.get(i).get(j);
-        return getString(item);
-    }
-
-    /**
-     * toString method used by printMultiPoly() to allow and easier time to turn the poly into a string.
-     * @param i taken as the index of the string within the list
-     * @param polyList a DoublyLinkedList containing strings in an improper format
-     * @return the string in a proper format
-     */
-    private String toString(int i, DoublyLinkedList<String> polyList) {
-        String item = polyList.get(i);
-        return getString(item);
     }
 
     /**
@@ -158,9 +138,9 @@ public class P1_SVP {
      * @param item a string to be turned into proper printable format
      * @return the string in proper printable format
      */
-    private String getString(String item) {
-        int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
-        int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
+    private String toString(Term item) {
+        int coef = item.getCoefficient();
+        int power = item.getExponent();
         String end = "";
         if (power == 0) {
             end = end + coef + " ";
@@ -180,55 +160,78 @@ public class P1_SVP {
      * Multiples the polynomials given to this class together and stores them in a final list as a result.
      */
     public void multiplyPolys() {
-        StringBuilder complete = new StringBuilder();
-        for (int i = 0; i < polyLists.getSize(); i++) {
-            for (int j = i + 1;  j < polyLists.getSize(); j++) {
-                for (int k = 0; k < polyLists.get(i).getSize(); k++) {
-                    // Getting the coefficient and power and multiplying it by the other polynomials variables
-                    String multi = polyLists.get(i).get(k);
-                    int multiPower = Integer.parseInt(multi.substring(multi.indexOf(" ")+1));
-                    int multiCoef = Integer.parseInt(multi.substring(0, multi.indexOf(" ")));
-                    for(int l = 0; l < polyLists.get(j).getSize(); l++) {
-                        String item = polyLists.get(j).get(l);
-                        int power = Integer.parseInt(item.substring(item.indexOf(" ")+1));
-                        int coef = Integer.parseInt(item.substring(0, item.indexOf(" ")));
-                        int finCoef = multiCoef * coef;
-                        int finPower = multiPower + power;
-                        String vari = finCoef + " " + finPower + "\r\n";
-                        complete.append(vari);
+        if (polyLists.getSize() <= 0) {
+            return;
+        }
+        if (polyLists.getSize() == 1) {
+            multiPolyList = polyLists.getLast();
+            return;
+        }
+        DoublyLinkedList<Term> result = null;
+        boolean isFirst = true;
+        for (DoublyLinkedList<Term> currentPoly : polyLists) {
+            if (isFirst) {
+                result = currentPoly;
+                isFirst = false;
+            } else {
+                result = multiplyPolys(result, currentPoly);
+            }
+        }
+        multiPolyList = result;
+    }
+
+    private DoublyLinkedList<Term> multiplyPolys(DoublyLinkedList<Term> poly1, DoublyLinkedList<Term> poly2) {
+        DoublyLinkedList<Term> result = new DoublyLinkedList<>();
+        for (Term termA : poly1) {
+            int coefA = termA.getCoefficient();
+            int powerA = termA.getExponent();
+            for (Term termB : poly2) {
+                int coefB = termB.getCoefficient();
+                int powerB = termB.getExponent();
+                int newCoef = coefA * coefB;
+                int newPower = powerA + powerB;
+                Term termC = new Term(newCoef, newPower);
+                if (result.getSize() > 0) {
+                    int index = 0;
+                    boolean add  = false;
+                    for (Term termD : result) {
+                        add = compareTerms(termC, termD, result, index);
+                        if (add) {
+                            break;
+                        }
+                        index++;
                     }
+                    if (!add) {
+                        result.add(termC);
+                    }
+                } else {
+                    result.add(termC);
                 }
             }
         }
-        multiPolyList = getStringLinkedList(complete.toString());
+        return result;
     }
 
     /**
      * Prints the multiplied polynomials out
      */
     public void printMultiPoly() {
-        int size = multiPolyList.getSize()-1;
         System.out.print("Product: ");
         StringBuilder poly = new StringBuilder();
         String var;
-        for (int j = 0; j < size; j++) {
-                var = toString(j, multiPolyList);
-                if (j != 0) {
-                    if (var.indexOf("-") == 0) {
-                        var = "- " + var.substring(1);
-                    } else {
-                        var = "+ " + var;
-                    }
+        int index = 0;
+        for (Term term : multiPolyList) {
+            var = toString(term);
+            if (index != 0) {
+                if (var.indexOf("-") == 0) {
+                    var = "- " + var.substring(1);
+                } else {
+                    var = "+ " + var;
                 }
-                poly.append(var);
-            }
-            var = toString(size, multiPolyList);
-            if (var.indexOf("-") == 0) {
-                var = "- " + var.substring(1);
-            } else {
-                var = "+ " + var;
             }
             poly.append(var);
-            System.out.println(poly);
+            index++;
+        }
+        System.out.println(poly);
     }
 }
