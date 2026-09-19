@@ -2,8 +2,10 @@ package main;
 
 import project.GreatestCommonDivisor;
 import project.P1_SVP;
+import static practice.JavaEntropyGenerator.getNextPseudoTrueRandom;
 
 import java.io.File;
+import java.util.Random;
 
 /**
  * @author Alejandro Borroni
@@ -13,6 +15,20 @@ public class Main {
 	public static void main(String[] args) {
 		GCD_main();
     }
+
+	/**
+	 * An attempt at true randomness
+	 * Take the random number generated using some chaos and map it to a 1-12 range output, kinda like how
+	 * a clock rotates its arms, it will rotate within the range of 1-12 no matter how big the number
+	 * and stop at the point. E.g. 13 would be 1, 20 would be 8, and so on.
+	 */
+	public static void randNum() {
+		int rawValue = getNextPseudoTrueRandom(); // Yields any 32-bit int
+		int range = 12;
+
+		int result = Math.floorMod(rawValue, range) + 1;
+		System.out.println("Roll: " + result);
+	}
 	
 	/**
 	 * P1_SVP main method.
@@ -31,12 +47,33 @@ public class Main {
 
 	public static void GCD_main(){
 		GreatestCommonDivisor GCD = new GreatestCommonDivisor();
-		long m = 57398969; //(long) (Math.random() * 10000);
-		long n = 480593799;
-		System.out.printf("Iteration 1: m = %d, n = %d%n", m, n);
-		long time = System.currentTimeMillis();
-		GCD.GCDEucli(m, n, time);
-		System.out.printf("Euclidean Algorithm: %d milliseconds%n", System.currentTimeMillis() - time);
-		time = System.currentTimeMillis();
+		Random random = new Random();
+		long min = 1000;
+		long max = 10000;
+		for (int i = 1; i <= 3; i++) {
+			long m = random.nextLong(max - min + 1) + min;
+			long n = random.nextLong(max - min + 1) + min;
+			System.out.printf("Iteration %d: m = %d, n = %d%n", i, m, n);
+			long startTime = System.nanoTime();
+			GCD.GCDEucli(m, n, startTime);
+			long endTime = System.nanoTime();
+			long durationNs = endTime - startTime;
+			double durationMs = durationNs / 1_000_000.0;
+			System.out.printf("Euclidean Algorithm: %.3f ms%n", durationMs);
+			startTime = System.nanoTime();
+			GCD.GCDPrimeFact(m, n, startTime);
+			endTime = System.nanoTime();
+			durationNs = endTime - startTime;
+			durationMs = durationNs / 1_000_000.0;
+			System.out.printf("Prime Factorization Algorithm: %.3f ms%n", durationMs);
+			startTime = System.nanoTime();
+			GCD.GCDBrutal(m, n, startTime);
+			endTime = System.nanoTime();
+			durationNs = endTime - startTime;
+			durationMs = durationNs / 1_000_000.0;
+			System.out.printf("Brutal Force Method: %.3f ms%n%n", durationMs);
+			min *= 10;
+			max *= 10;
+		}
 	}
 }
