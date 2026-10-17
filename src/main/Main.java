@@ -2,9 +2,12 @@ package main;
 
 import project.GreatestCommonDivisor;
 import project.P1_SVP;
+import project.TennisServingPuzzle;
+
 import static practice.JavaEntropyGenerator.getNextPseudoTrueRandom;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -13,7 +16,7 @@ import java.util.Random;
  */
 public class Main {
 	public static void main(String[] args) {
-		GCD_main();
+		TSP_main();
     }
 
 	/**
@@ -45,6 +48,9 @@ public class Main {
          */
 	}
 
+	/**
+	 * GCD main method
+	 */
 	public static void GCD_main(){
 		GreatestCommonDivisor GCD = new GreatestCommonDivisor();
 		Random random = new Random();
@@ -75,5 +81,15 @@ public class Main {
 			min *= 10;
 			max *= 10;
 		}
+	}
+
+	/**
+	 * main method for the TennisServingPuzzle
+	 */
+	public static void TSP_main(){
+		double aProb = 0.5;
+		double bProb = 0.5;
+		TennisServingPuzzle TSP1 = new TennisServingPuzzle(aProb, bProb, 2);
+		TSP1.printGame();
 	}
 }

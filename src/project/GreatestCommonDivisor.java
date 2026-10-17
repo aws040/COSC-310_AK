@@ -9,6 +9,13 @@ import java.util.Map;
  * @version 2026.9.16.18
  */
 public class GreatestCommonDivisor {
+	/**
+	 * Will return the GCD using the euclidean method. It will also return -1 if it ever goes over 10 seconds
+	 * @param m taken as a long
+	 * @param n taken as a long
+	 * @param time taken as the current system time.
+	 * @return the GCD
+	 */
     public long GCDEucli(long m, long n, long time) {
         if (m < n) {
             long temp = n;
@@ -21,13 +28,27 @@ public class GreatestCommonDivisor {
         return GCDEucliRecur(n, m%n, time);
     }
 
+    /**
+     * The private version made for recursion
+     * @param m taken as a long
+     * @param n taken as a long
+     * @param time taken as the current system time.
+     * @return the GCD
+     */
     private long GCDEucliRecur(long m, long n, long time) {
         if (n == 0) return 0;
-        if (System.currentTimeMillis() - time > 10000) return -1;
+        if (System.nanoTime() - time > 10000000000L) return -1;
         if (m%n == 0) return n;
         return GCDEucliRecur(n, m%n, time);
     }
 
+    /**
+     * Will return the GCD using the prime factorization method. It will also return -1 if it ever goes over 10 seconds
+     * @param m taken as a long
+     * @param n taken as a long
+     * @param time taken as the current system time.
+     * @return the GCD
+     */
     public long GCDPrimeFact(long m, long n, long time) {
         if (n == 0) return m;
         if (m == 0) return n;
@@ -40,7 +61,7 @@ public class GreatestCommonDivisor {
         long minExponent;
         long gcdResult = 1;
         for (Map.Entry<Long, Long> entry : factorN.entrySet()) {
-            if (System.currentTimeMillis() - time > 10000) return -1;
+            if (System.nanoTime() - time > 10000000000L) return -1;
             if (factorM.containsKey(entry.getKey())) {
                 minExponent = Long.min(entry.getValue(), factorM.get(entry.getKey()));
                 gcdResult = gcdResult * (long) Math.pow(entry.getKey(), minExponent);
@@ -49,6 +70,15 @@ public class GreatestCommonDivisor {
         return gcdResult;
     }
 
+    /**
+     * The private method for the prime factorization method, it takes a long and the time, and it a hashmap to store the primes
+     * and with that all if gets all the lowest primes possible out from a number and returns true if it was able to, and false if it ran
+     * over 10 seconds.
+     * @param n taken as a long
+     * @param time taken as the current system time
+     * @param factorN take as an emtpy hashmap for storing the primes.
+     * @return a boolean if it added them to the entire map
+     */
     private boolean getPrimeFactor(long n, long time, LinkedHashMap<Long, Long> factorN) {
         while (n % 2 == 0) {
             if (factorN.containsKey(2L)) {
@@ -61,7 +91,7 @@ public class GreatestCommonDivisor {
         long d = 3;
         while (d * d <= n) {
             while (n % d == 0) {
-                if (System.currentTimeMillis() - time > 10000) return true;
+                if (System.nanoTime() - time > 10000000000L) return true;
                 if (factorN.containsKey(d)) {
                     factorN.put(d, factorN.get(d) + 1);
                 } else {
@@ -80,6 +110,14 @@ public class GreatestCommonDivisor {
         return false;
     }
 
+    /**
+     * The brutal force method, it counts down from the lowest prime and tries to see if both are divisible
+     * by that number
+     * @param m taken as a long
+     * @param n taken as a long
+     * @param time taken as teh current time
+     * @return the GCD
+     */
     public long GCDBrutal(long m, long n, long time) {
         if (n == 0) return m;
         if (m == 0) return n;
@@ -90,7 +128,7 @@ public class GreatestCommonDivisor {
             m = temp;
         }
         for (long i = n; i > 0; i--) {
-            if (System.currentTimeMillis() - time > 10000) return -1;
+            if (System.nanoTime() - time > 10000000000L) return -1;
             if (m % i == 0 && n % i == 0) {
                 return i;
             }

@@ -56,7 +56,7 @@ public class DoublyLinkedList<E> implements Iterable<E>{
         }
     }
     /**
-     * Returns an iterator over elements of type {@code T}.
+     * Returns an iterator over elements of type {@code <E>}.
      *
      * @return an Iterator.
      */
