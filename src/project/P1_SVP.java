@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
@@ -40,13 +39,7 @@ public class P1_SVP {
             sc.close();
         } catch (FileNotFoundException e) {
             try {
-                Path currentPath = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-                Path parentDir = currentPath.getParent().getParent();
-                String pathStr = currentPath.toString();
-                if (pathStr.contains("out\\production")) {
-                    parentDir = currentPath.getParent().getParent().getParent().getParent();
-                }
-                System.out.println(parentDir.toString());
+                Path parentDir = Main.localPath();
                 System.err.printf("P1_SVP_Input.txt was not found in parent directory. Place file in the %s folder and try again.", parentDir.getFileName().toString());
             }catch (URISyntaxException s) {
                 s.printStackTrace();

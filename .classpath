@@ -7,5 +7,6 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry kind="var" path="MAVEN_REPOSITORY/org/jetbrains/annotations/26.0.2/annotations-26.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

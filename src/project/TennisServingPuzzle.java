@@ -20,16 +20,16 @@ public class TennisServingPuzzle {
      * @param firstToN taken as an int and how far the game should go
      */
     public TennisServingPuzzle(double ProbA, double ProbB, int firstToN) {
-        if (firstToN >= 1 && firstToN <= 8) {
-            playGame(firstToN);
-        } else {
-            throw new IllegalArgumentException("First to N must be between 1 and 8");
-        }
         if ((ProbA > 1 || ProbA < 0) || (ProbB > 1 || ProbB < 0)) {
             throw new IllegalArgumentException("Probability must be between 0 and 1");
         }
         this.ProbA = ProbA;
         this.ProbB = ProbB;
+        if (firstToN >= 1 && firstToN <= 8) {
+            playGame(firstToN);
+        } else {
+            throw new IllegalArgumentException("First to N must be between 1 and 8");
+        }
     }
 
     /**
@@ -65,7 +65,7 @@ public class TennisServingPuzzle {
      * gathering the probability of the users winning and returns that to print.
      */
     public void printGame() {
-        System.out.printf("A wins on own serve: %f%nB wins on own serve: %f%n", ProbA, ProbB);
+        System.out.printf("A wins on own serve: %s%nB wins on own serve: %s%n", ProbA, ProbB);
         double aTotalProb = printGame(TennisPuzzleOutcome.getRoot());
         double bTotalProb = 1 - aTotalProb;
         System.out.printf("Total tree nodes: %d; Leaf nodes: %d%n", TennisPuzzleOutcome.count(), TennisPuzzleOutcome.countLeafs());
@@ -75,7 +75,7 @@ public class TennisServingPuzzle {
     }
 
     private double printGame(BinaryTree.BinTreeNode<Round> currRound) {
-        double finalProbability = 0.0f;
+        double finalProbability = 0.0;
         if (currRound.left() == null && currRound.right() == null) {
             Round temp = currRound.data();
             System.out.printf("Terminal path: %s, %s, %s%n", temp.sequenceWon(), temp.aScore() > temp.bScore() ? "A" : "B", temp.probability());
